@@ -4,13 +4,6 @@ using System.Linq;
 using System.Reflection;
 
 namespace ModularFramework.Implementers {
-    public class SharedPropertyAttribute : Attribute {
-        public SharedPropertyAttribute() : this(null) { }
-        public SharedPropertyAttribute(string propertyName) {
-            Name = propertyName;
-        }
-        public string Name { get; private set; }
-    }
     public class SharedPropertyBag : MarshalByRefObject, ISharedPropertyBag {
         object ownerInstance;
         Hashtable propertiesHash = new Hashtable();

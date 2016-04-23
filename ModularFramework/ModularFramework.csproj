@@ -36,14 +36,17 @@
     <AssemblyOriginatorKeyFile>sgKey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Helpers.cs" />
     <Compile Include="Implementers\BaseInteractionModule.cs" />
     <Compile Include="Implementers\ModuleCreator.cs" />
     <Compile Include="Implementers\ModuleInfo.cs" />

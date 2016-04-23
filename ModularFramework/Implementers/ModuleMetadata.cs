@@ -54,6 +54,9 @@ namespace ModularFramework.Implementers {
             initialModulesDirectory = new DirectoryInfo(pathToModulesDir);
             CreateModuleSetInstance();
         }
+        public IEnumerable<IModuleMetadata> ModuleMetadataSet {
+            get { return moduleMetadataSetCore; }
+        }
         public void Dispose() { }
         public void PopulateMetadata() {
             CreateTemporaryDirectoryForModules();
@@ -82,29 +85,13 @@ namespace ModularFramework.Implementers {
             return moduleDir;
         }
         protected virtual bool TryGetModuleMetadata(DirectoryInfo unpackedModuleDir, out IModuleMetadata moduleMetadata) {
-            moduleMetadata = null;
-            FileInfo moduleManifestFile = unpackedModuleDir.GetFiles().SingleOrDefault(f => f.Name == "manifest.json");
-            if(moduleManifestFile == null) return false;
-            IModuleManifest moduleManifest = DeserializeModuleManifest(moduleManifestFile);
-            moduleMetadata = CreateModuleMetadataInstance(moduleManifest, unpackedModuleDir);
-            return true;
-        }
-        protected virtual IModuleManifest CreateModuleManifestInstance() {
-            return new ModuleManifest();
+            string moduleManifestFile = unpackedModuleDir.GetFiles().SingleOrDefault(f => f.Name == "manifest.json").FullName;
+            IModuleManifest moduleManifest = SerializationHelper.DeserializeFrom<ModuleManifest>(moduleManifestFile);
+            moduleMetadata = moduleManifest != null ? CreateModuleMetadataInstance(moduleManifest, unpackedModuleDir) : null;
+            return moduleMetadata != null;
         }
         protected virtual IModuleMetadata CreateModuleMetadataInstance(IModuleManifest manifest, DirectoryInfo dir) {
             return new ModuleMetadata(manifest, dir);
-        }
-        protected virtual IModuleManifest DeserializeModuleManifest(FileInfo manifestFile) {
-            IModuleManifest manifest = null;
-            using(Stream stream = manifestFile.OpenRead()) {
-                var serializer = new DataContractJsonSerializer(typeof(ModuleManifest));
-                manifest = serializer.ReadObject(stream) as IModuleManifest;
-            }
-            return manifest;
-        }
-        public IEnumerable<IModuleMetadata> ModuleMetadataSet {
-            get { return moduleMetadataSetCore; }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace ModularFramework {
     public static class FileInfoExtension {
@@ -28,6 +29,11 @@ namespace ModularFramework {
                     dirElement.CopyTo(copyPath, overwrite);
                 }
             }
+        }
+        public static TOut Maybe<TIn, TOut>(this TIn self, Func<TIn, TOut> accessor, TOut @default = null)
+            where TIn : class 
+            where TOut : class {
+            return self == null ? @default : accessor(self);
         }
     }
 }
